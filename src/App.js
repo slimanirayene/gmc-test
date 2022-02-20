@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "antd/dist/antd.css";
+import { Component } from "react";
+import Navbar from "./containers/navbar";
+import ResultsContainer from "./containers/ResultsContainer";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			cart: [],
+			songs: [],
+		};
+	}
+	addSongs = (title) => {
+		this.setState({
+			songs: title,
+		});
+	};
+	addToCart = (title, price, image) => {
+		console.log("Adding to cart from App.js", title, price);
+		this.setState({
+			cart: [...this.state.cart, { name: title, price: price, image: image }],
+		});
+	};
+	removeFromCart = (deleted) => {
+		this.setState({
+			cart: this.state.cart.filter(function (object) {
+				return object !== deleted;
+			}),
+		});
+	};
+	render() {
+		console.log("cart", this.state.cart);
+		return (
+			<div className="App">
+				<Navbar cart={this.state.cart} data={this.addSongs} />
+				<ResultsContainer
+					removeCart={this.removeFromCart}
+					addCart={this.addToCart}
+					data={this.state.songs}
+				/>
+			</div>
+		);
+	}
 }
 
 export default App;
